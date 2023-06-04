@@ -70,8 +70,33 @@
             За эти годы были успешно осуществлены исследовательские проекты и маркетинговые исследования для более чем 800 ведущих российских и международных компаний.
             Мы выделяемся из общей массы исследовательских агентств уникальным набором ресурсов, развитой и проверенной методологией, опытом и безупречной репутацией, сформировавшимися за более чем 20  лет существования компании.
             Наши информационные услуги и маркетинговые исследования затрагивают практически все основные рынки России и стран СНГ, а клиентами явлются практически все отрасли.</p>
-        <button id="want">Отправить запрос</button>
+        <button id="order">Заполнить форму</button>
     </div>
+
+    <form id="form">
+        <h1>Заполните форму ниже и вскоре мы свяжемся с Вами</h1>
+        <input type="text" placeholder="Имя" id="name">
+        <input type="text" placeholder="Компания" id="company">
+        <input type="text" placeholder="Email" id="mail">
+        <input type="text" placeholder="Телефон" id="phone">
+        <button id="sent">Отправить запрос</button>
+    </form>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        let tg = window.Telegram.WebApp;
+        let order = document.getElementById("order");
+        let sent = document.getElementById("order");
+
+        order.addEventListener("click", () => {
+            document.getElementById("main").style.display = "none";
+            document.getElementById("form").style.display = "block";
+            document.getElementById("user_name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;
+        });
+
+        sent.addEventListener("click", () => {
+            tg.close();
+        });
+
+    </script>    
 </body>
 </html>
