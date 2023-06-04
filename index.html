@@ -94,10 +94,11 @@
 
     <form id="form">
         <h1>Заполните форму ниже и вскоре мы свяжемся с Вами</h1>
-        <input type="text" placeholder="Имя" id="name">
-        <input type="text" placeholder="Компания" id="company">
-        <input type="text" placeholder="Email" id="mail">
-        <input type="text" placeholder="Телефон" id="phone">
+        <input type="text" placeholder="Имя" id="user_name">
+        <input type="text" placeholder="Компания" id="user_company">
+        <input type="text" placeholder="Email" id="user_mail">
+        <input type="text" placeholder="Телефон" id="user_phone">
+        <div id="error"></div>
         <button id="sent">Отправить запрос</button>
     </form>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -105,14 +106,50 @@
         let tg = window.Telegram.WebApp;
         let order = document.getElementById("order");
         let sent = document.getElementById("sent");
-
+        tg.expand();
+        
         order.addEventListener("click", () => {
             document.getElementById("main").style.display = "none";
             document.getElementById("form").style.display = "block";
-            document.getElementById("name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;
+            document.getElementById("user_name").value = tg.initDataUnsafe.user.first_name + " " + tg.initDataUnsafe.user.last_name;
         });
 
         sent.addEventListener("click", () => {
+            document.getElementById("error").innerText = '';
+            let name = document.getElementById("user_name").value;
+            let company = document.getElementById("user_company").value;
+            let mail = document.getElementById("user_mail").value;
+            let phone = document.getElementById("user_phone").value;
+            
+            if (name.length < 2) {
+                document.getElementById("error").innerText = 'Введите корректное имя';
+                return;
+            }
+            
+            if (company.length < 1) {
+                document.getElementById("error").innerText = 'Если Вы не являетесь представителем какой-либо компании, введите 0';
+                return;
+            }
+            
+            if (mail.length < 7) {
+                document.getElementById("error").innerText = 'Введите корректный адрес электронной почты';
+                return;
+            }
+            
+            if (name.length < 10) {
+                document.getElementById("error").innerText = 'Введите корректный номер телефона в формате 8ХХХХХХХХХХ';
+                return;
+            }
+            
+            let data = {
+                name: name,
+                company: company,
+                mail: mail,
+                phone: phone
+            }
+
+            tg.setData(JSON.stringify(data));
+
             tg.close();
         });
 
